@@ -19,7 +19,3 @@ Recommended workflow:
 1. Download the ICOS ETC L2 ARCHIVE data
 2. Run the create_input_file.R script
 3. Run the ICOS_fluxdata.R script
-
-
-
-
