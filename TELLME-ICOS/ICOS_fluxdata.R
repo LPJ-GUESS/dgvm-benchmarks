@@ -3,6 +3,7 @@
 # DGVMTools R package
 # See README file for more information about the required input and workflow
 
+
 ICOS_fluxdata <- function(file_name) {
   library(readr)
   library(ggplot2)
@@ -74,6 +75,15 @@ ICOS_fluxdata <- function(file_name) {
     colnames(temp)[(ncol(temp) - length(variables_fluxnet) + 1):ncol(temp)] <-
       variables_fluxnet
     
+    # deal with the first and last year
+    if (first_year != "") {
+      temp <- temp[!(as.numeric(temp$Year) < as.numeric(first_year) | as.numeric(temp$Year) > as.numeric(last_year)),]
+      if (nrow(temp) == 0) {
+        stop("No data for the selected data seems to be available. Change the input file!")
+      }
+    }
+    
+    
     # writing the extracted data to the empty csv file
     if (i == 1) {
       # for the first iteration, column names are included
@@ -107,8 +117,8 @@ ICOS_fluxdata <- function(file_name) {
   layers_obs <- list()
   
   quantities_table <- data.table(
-    id = c("GPP", "NEE", "RECO"),
-    name = c("GPP", "NEE", "RECO"),
+    id = c("GPP", "NEE", "Reco"),
+    name = c("GPP", "NEE", "Reco"),
     units = c("kgC/m^2", "kgC/m^2", "kgC/m^2")
   )
   
@@ -133,7 +143,7 @@ ICOS_fluxdata <- function(file_name) {
     return(temp)
   }
   
-  getField_obs <- function(source,
+  getField_ICOS <- function(source,
                            quant,
                            layers,
                            sta.info,
@@ -180,7 +190,7 @@ ICOS_fluxdata <- function(file_name) {
     predefined.layers = layers_obs,
     quantities = quantities_obs,
     availableQuantities = availableQuantities_obs,
-    getField = getField_obs
+    getField = getField_ICOS
   )
   
   
