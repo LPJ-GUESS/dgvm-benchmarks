@@ -1,10 +1,13 @@
-ICOS fluxdata
-Version 1.0.0
+ICOS fluxdata, GUESS fluxdata
 
 ICOS fluxdata script can be used for:
 - reading daily ICOS fluxdata
 - writing the selected variables and values to a new .csv file
 - reformatting it to match the format from the DGVMTools R package (https://github.com/MagicForrest/DGVMTools)
+
+GUESS fluxdata script can be used for:
+- reading daily LPJ-GUESS data
+- reformatting it to the DGVMTools format
 
 Currently the following fluxnet variables are supported:
 - GPP
@@ -19,3 +22,4 @@ Recommended workflow:
 1. Download the ICOS ETC L2 ARCHIVE data
 2. Run the create_input_file.R script
 3. Run the ICOS_fluxdata.R script
+4. Run the GUESS_fluxdata.R script
