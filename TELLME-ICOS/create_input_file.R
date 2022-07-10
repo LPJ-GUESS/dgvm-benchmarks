@@ -60,6 +60,37 @@ create_input_file <- function() {
     }
   }
   
+  
+  # **** TIME PERIOD ****
+  temp <- FALSE
+  while (temp == FALSE) {
+    first_year <- readline(prompt="Press enter to include all available years, or enter the first year to be included.")
+    if (first_year == "") {
+      temp <- TRUE
+    } else if (is.numeric(as.numeric(first_year)) == TRUE && nchar(first_year) == 4) {
+      temp <- TRUE
+    } else {
+      message("Please enter a valid numerical value.")
+    }
+  }
+  
+  last_year <- ""
+  if (first_year != "") {
+    temp <- FALSE
+    while (temp == FALSE) {
+      last_year <- readline(prompt="Enter the last year to be included.")
+      if (is.numeric(as.numeric(last_year)) == TRUE && nchar(last_year) == 4 && last_year >= first_year) {
+        temp <- TRUE
+      } else if (is.numeric(as.numeric(last_year)) == TRUE && last_year < first_year) {
+        message("Last year cannot be smaller than the first year to be included!")
+      } else {
+        message("Please enter a valid numerical value.")
+      }
+    }
+  }
+
+
+  
   # **** FLUXNET SPECIFIC VARIABLES ****
   UT_method_input <- readline(prompt="Press enter to set the USTAR method to VUT, or hit any of the letter keys to set it to CUT.")
   if (UT_method_input == "") {
@@ -72,7 +103,7 @@ create_input_file <- function() {
   
 
   # **** FLUXNET VARIABLES SELECTION ****
-  supported_fluxnet_variables <- c("GPP", "NEE", "RECO")
+  supported_fluxnet_variables <- c("GPP", "NEE", "Reco")
   cat("The supported fluxnet variables are: ", toString(supported_fluxnet_variables))
   fluxnet_variables_input <- readline(prompt="Press enter to include all of them, or any of the letter keys to continue to the selection process. \n")
   
@@ -84,7 +115,7 @@ create_input_file <- function() {
       temp <- ""
       while (tolower(temp) != "y" && tolower(temp) != "n") {
         temp <- readline(prompt=paste0("Include ", i, "? Yes = y, no = n. \n"))
-        if (tolower(temp) == "y") {
+         if (tolower(temp) == "y") {
           variables_fluxnet <- append(variables_fluxnet, i)
           break
         } else if (tolower(temp) == "n") {
@@ -101,9 +132,9 @@ create_input_file <- function() {
   # **** WRITING TO INPUT TEXT FILE ****
   data_input <- data.table(
     Variable = c("path_ICOS", "path_GUESS", "sites", "longitude", "latitude", 
-                 "UT_method", "suffix", "variables_fluxnet"),
+                 "first_year", "last_year", "UT_method", "suffix", "variables_fluxnet"),
     Value = c(as.character(path_ICOS), as.character(path_GUESS), toString(sites), toString(longitude),
-              toString(latitude), UT_method, suffix, toString(variables_fluxnet)))
+              toString(latitude), first_year, last_year, UT_method, suffix, toString(variables_fluxnet)))
   
   write.table(data_input, file = "TELLUS_input.txt", row.names = FALSE, col.names = TRUE)
   
@@ -113,3 +144,4 @@ create_input_file <- function() {
 }
 
 create_input_file()
+
